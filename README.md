@@ -39,7 +39,6 @@ In January 2023, CircleCI experienced a security breach where an unauthorized th
 
 ### 2. Root Cause
 
-
 The root cause was malware deployed on a CircleCI engineer's laptop that:
 
 - Stole a valid 2FA-backed SSO session
@@ -47,7 +46,6 @@ The root cause was malware deployed on a CircleCI engineer's laptop that:
 - Enabled the attacker to escalate access to production systems
 - Gave access to generate production tokens (part of the employee's regular duties)
 - Allowed extraction of encryption keys from running processes, enabling decryption of the stolen data
-
 
 ### 3. Learning and Takeaway
 
@@ -88,7 +86,58 @@ For CircleCI's internal improvements:
 
 1. Initial exploitation of a `pull_request_target` trigger leaked a maintainer's PAT
 2. Attackers used a chain of compromised tokens to move through multiple repositories
-3. Techniques included commit impersonation, git tag manipulation, and deleted accounts
+3. Techniques included commit impersonation, git tag manipulation.
+
+**Attack Technique 1: 🎭 Commit Impersonation in the GitHub Actions Attack**
+
+In this attack, the hackers used commit impersonation as a key technique to evade detection while introducing malicious code. Here's what they did:
+
+When compromising the `tj-actions/changed-files` repository, the attackers:
+
+1. Created a malicious commit (`0e58ed8`) containing the Base64-encoded payload that extracted secrets
+2. Made this commit appear as if it was authored by `renovate[bot]` — a legitimate automation bot that regularly updates dependencies in many repositories
+3. Added this impersonated commit to a legitimate pull request that had been opened by the real `renovate[bot]`
+4. Had this pull request automatically merged, as the workflow was configured to auto-merge `renovate[bot]` updates
+
+The report specifically notes:
+
+> "The attacker was able to add the malicious commit (0e58ed8) to the repository by using a GitHub token with write permissions that they obtained previously. The attacker disguised the commit to look as if it was created by renovate[bot] — a legitimate user."
+
+**Attack Technique 2: 🏷️ Git Tag Manipulation**
+
+**How Git Tags Work**
+
+Git tags are pointers to specific points in Git history - essentially labels attached to specific commits:
+
+```
+A -- B -- C -- D (main branch)
+     ^
+     |
+    v1.0 (tag)
+```
+
+Tags are commonly used to mark release versions (like v1.0, v2.0, etc.). Most importantly, tags are typically **referenced** by other projects rather than specific commit hashes.
+
+**The Attack Technique**
+
+In this attack, the hackers:
+
+1. **Created malicious commits** in a fork of the targeted repository
+2. **Used stolen credentials** with write access to modify existing tags
+3. **Force-pushed the tags** to point to their malicious commits instead of the legitimate ones:
+
+```
+Before:                            After:
+
+A -- B -- C (legitimate)           A -- B -- C (legitimate)
+     ^
+     |                             X -- Y -- Z (malicious)
+    v1.0                                ^
+                                        |
+                                       v1.0
+```
+
+4. **Deleted evidence** by removing their forks after the tags were manipulated
 
 #### 3. Key Learnings
 
@@ -314,6 +363,6 @@ publish:
 1. **Use Dependency Caching**: Speed up workflows by caching dependencies (as shown with `cache: "npm"`)
 2. **Store Secrets Securely**: Use GitHub's repository secrets for sensitive information
 3. **Minimize Job Dependencies**: Only use `needs` when a job truly depends on another
-5. **Use Community Actions**: Leverage existing actions from the GitHub Marketplace
-7. **Set Timeout Limits**: Prevent workflows from running too long by setting timeout limits
-8. **Use Artifacts**: Share data between jobs by uploading and downloading artifacts
+4. **Use Community Actions**: Leverage existing actions from the GitHub Marketplace
+5. **Set Timeout Limits**: Prevent workflows from running too long by setting timeout limits
+6. **Use Artifacts**: Share data between jobs by uploading and downloading artifacts
