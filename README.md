@@ -47,6 +47,7 @@ The root cause was malware deployed on a CircleCI engineer's laptop that:
 - Gave access to generate production tokens (part of the employee's regular duties)
 - Allowed extraction of encryption keys from running processes, enabling decryption of the stolen data
 
+
 ### 3. Learning and Takeaway
 
 From the incident, CircleCI learned:
