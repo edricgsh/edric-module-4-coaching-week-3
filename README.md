@@ -25,8 +25,6 @@
 
 ### CircleCI Incident Report (Jan 4, 2023)
 
-I'll extract the key information from the CircleCI incident report and provide a summarized version covering the requested points.
-
 ### 1. What Happened?
 
 In January 2023, CircleCI experienced a security breach where an unauthorized third party gained access to customer data. The timeline:
