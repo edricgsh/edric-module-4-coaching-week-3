@@ -39,6 +39,7 @@ In January 2023, CircleCI experienced a security breach where an unauthorized th
 
 ### 2. Root Cause
 
+
 The root cause was malware deployed on a CircleCI engineer's laptop that:
 
 - Stole a valid 2FA-backed SSO session
