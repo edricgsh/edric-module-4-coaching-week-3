@@ -60,7 +60,7 @@ For customers:
 
 - Rotate all secrets (OAuth tokens, API tokens, SSH keys, etc.)
 - Use OIDC tokens where possible to avoid storing long-lived credentials
-- Take advantage of IP ranges to limit inbound connections
+- Take advantage of [IP ranges](https://circleci.com/docs/ip-ranges/#use-cases) to limit inbound connections
 - Use [Contexts](https://circleci.com/docs/contexts/) to consolidate shared secrets and restrict access
 - Consider using [runners](https://circleci.com/docs/runner-overview/#circleci-runner-use-cases) for privileged access and additional controls
 
