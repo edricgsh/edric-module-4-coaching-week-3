@@ -1,4 +1,4 @@
-# Module 4 - Edric's Coaching Week 2
+# Module 4 - Edric's Coaching Week 3
 
 ## Agenda
 
