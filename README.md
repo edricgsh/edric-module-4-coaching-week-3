@@ -7,10 +7,9 @@
    1. [CircleCI Incident Report (Jan 4, 2023)](https://circleci.com/blog/jan-4-2023-incident-report/) - Review some of the best practices recommended in the report
    2. [GitHub Actions Supply Chain Attack](https://unit42.paloaltonetworks.com/github-actions-supply-chain-attack/) - Security implications and lessons
 
-2. CircleCI Concepts and Commands
+2. Recap: CircleCI Concepts and Commands
 
-   1. Best practices for CI/CD implementation
-   2. Key commands and configuration options
+   1. Key commands and configuration options
 
 3. CircleCI Checks Implementation
 
