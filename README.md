@@ -1,25 +1,15 @@
 # Module 4 - Edric's Coaching Week 2
 
-## Agenda
+## Table of Contents
 
 1. Case Study Analysis
 
-   1. [CircleCI Incident Report (Jan 4, 2023)](https://circleci.com/blog/jan-4-2023-incident-report/) - Review some of the best practices recommended in the report
-   2. [GitHub Actions Supply Chain Attack](https://unit42.paloaltonetworks.com/github-actions-supply-chain-attack/) - Security implications and lessons
+- CircleCI Incident Report (Jan 4, 2023)
 
-2. CircleCI Concepts and Commands
-
-   1. Best practices for CI/CD implementation
-   2. Key commands and configuration options
-
+2. Recap: CircleCI Concepts and Commands
 3. CircleCI Checks Implementation
-
-   1. Setting up automated checks
-   2. Configuration and customization
-
 4. GitHub Actions Overview
-   1. Comparison with CircleCI
-   2. Key differences and use cases
+5. MCP Integration Demo
 
 ## Case Study Analysis
 
@@ -73,104 +63,6 @@ For CircleCI's internal improvements:
 - Make system permissions more ephemeral
 - Shift from OAuth to GitHub apps for more granular permissions
 - Reduce session trust and add additional authentication factors
-
-### Supply Chain Attack on GitHub Actions - (March 2025)
-
-#### 1. What Happened?
-
-1. Attackers compromised `tj-actions/changed-files` and reviewdog actions, affecting 23,000+ repositories
-2. The attack extracted CI/CD secrets from memory, exposing them in workflow logs
-3. This sophisticated attack spanned from November 2024 to March 2025
-
-#### 2. Root Cause
-
-1. Initial exploitation of a `pull_request_target` trigger leaked a maintainer's PAT
-2. Attackers used a chain of compromised tokens to move through multiple repositories
-3. Techniques included commit impersonation, git tag manipulation.
-
-**Attack Technique 1: 🎭 Commit Impersonation in the GitHub Actions Attack**
-
-In this attack, the hackers used commit impersonation as a key technique to evade detection while introducing malicious code. Here's what they did:
-
-When compromising the `tj-actions/changed-files` repository, the attackers:
-
-1. Created a malicious commit (`0e58ed8`) containing the Base64-encoded payload that extracted secrets
-2. Made this commit appear as if it was authored by `renovate[bot]` — a legitimate automation bot that regularly updates dependencies in many repositories
-3. Added this impersonated commit to a legitimate pull request that had been opened by the real `renovate[bot]`
-4. Had this pull request automatically merged, as the workflow was configured to auto-merge `renovate[bot]` updates
-
-The report specifically notes:
-
-> "The attacker was able to add the malicious commit (0e58ed8) to the repository by using a GitHub token with write permissions that they obtained previously. The attacker disguised the commit to look as if it was created by renovate[bot] — a legitimate user."
-
-**Attack Technique 2: 🏷️ Git Tag Manipulation**
-
-**How Git Tags Work**
-
-Git tags are pointers to specific points in Git history - essentially labels attached to specific commits:
-
-```
-A -- B -- C -- D (main branch)
-     ^
-     |
-    v1.0 (tag)
-```
-
-Tags are commonly used to mark release versions (like v1.0, v2.0, etc.). Most importantly, tags are typically **referenced** by other projects rather than specific commit hashes.
-
-**The Attack Technique**
-
-In this attack, the hackers:
-
-1. **Created malicious commits** in a fork of the targeted repository
-2. **Used stolen credentials** with write access to modify existing tags
-3. **Force-pushed the tags** to point to their malicious commits instead of the legitimate ones:
-
-```
-Before:                            After:
-
-A -- B -- C (legitimate)           A -- B -- C (legitimate)
-     ^
-     |                             X -- Y -- Z (malicious)
-    v1.0                                ^
-                                        |
-                                       v1.0
-```
-
-4. **Deleted evidence** by removing their forks after the tags were manipulated
-
-#### 3. Key Learnings
-
-1. Dependencies between actions create dangerous compromise chains
-2. Unpinned GitHub actions (by tag instead of commit hash) are vulnerable
-3. Git tag changes don't appear in audit logs for free-tier GitHub accounts
-
-**Unpinned (Unsafe)**:
-
-```yaml
-- uses: tj-actions/changed-files@v39 # References a tag that can be modified
-- uses: tj-actions/changed-files@main # References a branch that can change
-```
-
-**Pinned (Safe)**:
-
-```yaml
-- uses: tj-actions/changed-files@a084acbbf7109ce39622e9eaaafafc31a5a6b7ef # Full commit hash
-```
-
-Why pinning matters:
-
-- Tags and branches are mutable references that can be modified to point to different commits
-- In this attack, the hackers changed the `v39` tag to point to malicious code
-- Even repositories that hadn't updated their workflows were affected since the tag itself was changed
-- When pinned to a full commit hash, the exact version is immutable and cannot be changed
-- Had repositories pinned to specific commit hashes, they would have been protected from this attack
-
-#### 4. Recommended Actions
-
-1. Pin actions to specific commit hashes and implement strict pipeline access controls
-2. Replace long-term credentials with short-lived tokens and rotate secrets regularly
-3. Avoid using `pull_request_target` triggers and implement monitoring for suspicious activity
 
 ## Recap of CircleCI Concepts and Commands
 
@@ -249,6 +141,17 @@ workflows:
             branches:
               only: main
 ```
+
+## MCP Integration Demo
+**AI-Powered CI/CD Management with MCP**
+
+Demonstrating how AI uses MCP integrations to automate DevOps workflows through natural language interactions.
+
+
+## CircleCI Integration with GitHub Rules Demo
+**Advanced Repository Protection with CircleCI Integration**
+
+Exploring how CircleCI integrates with GitHub's branch protection rules to enforce quality gates and security policies.
 
 ## GitHub Actions Overview
 
