@@ -1,4 +1,4 @@
-# Module 4 - Edric's Coaching Week 2
+# Module 4 - Edric's Coaching Week 3
 
 ## Table of Contents
 
@@ -14,8 +14,6 @@
 ## Case Study Analysis
 
 ### CircleCI Incident Report (Jan 4, 2023)
-
-I'll extract the key information from the CircleCI incident report and provide a summarized version covering the requested points.
 
 ### 1. What Happened?
 
@@ -53,7 +51,7 @@ For customers:
 
 - Rotate all secrets (OAuth tokens, API tokens, SSH keys, etc.)
 - Use OIDC tokens where possible to avoid storing long-lived credentials
-- Take advantage of IP ranges to limit inbound connections
+- Take advantage of [IP ranges](https://circleci.com/docs/ip-ranges/#use-cases) to limit inbound connections
 - Use [Contexts](https://circleci.com/docs/contexts/) to consolidate shared secrets and restrict access
 - Consider using [runners](https://circleci.com/docs/runner-overview/#circleci-runner-use-cases) for privileged access and additional controls
 
