@@ -8,8 +8,9 @@
 
 2. Recap: CircleCI Concepts and Commands
 3. CircleCI Checks Implementation
-4. GitHub Actions Overview
-5. MCP Integration Demo
+4. MCP Integration Demo
+5. GitHub Actions Overview
+
 
 ## Case Study Analysis
 
